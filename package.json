@@ -1,0 +1,17 @@
+{
+  "name": "devtoconnect_server",
+  "version": "1.0.0",
+  "description": "Backend server of DevToConnect application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aditya Singh Tomar",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "uuid": "^11.1.0"
+  }
+}
