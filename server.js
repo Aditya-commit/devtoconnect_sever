@@ -49,7 +49,17 @@ const cookieMiddleware = (req , res ,next) => {
           
           if(result.status === 200){
 
-            next();
+            if(req.path === '/auth/signup' || req.path === '/auth/signin'){
+
+              res.set('Content-Type' , 'text/plain');
+              res.status(301).end('Already Logged In');
+            }
+            else{
+
+              req.user_id = result.data;
+
+              next();
+            }
           }
           else{
 

@@ -76,7 +76,7 @@ export const signIn = async(req , res) => {
                 
                     if(insertResponse.status === 200){
 
-                        res.cookie('sessionid' , sessionId , { secure : true , signed : true });
+                        res.cookie('sessionid' , sessionId , { secure : true , signed : true , maxAge: 30 * 24 * 60 * 60 * 1000 });
 
                         res.set("Content-Type" , 'text/plain');
                         res.status(200).end('Signed In Successfully');
@@ -185,7 +185,7 @@ export const signUp = async(req , res) => {
 
            if(dbResponse.status === 200){
 
-                res.cookie('sessionid' , sessionId , { secure : true , signed : true });
+                res.cookie('sessionid' , sessionId , { secure : true , signed : true , maxAge: 30 * 24 * 60 * 60 * 1000 });
 
                 res.set('Content-Type' , 'text/plain');
                 res.end('Account Created Successfully');

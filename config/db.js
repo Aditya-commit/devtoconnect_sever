@@ -48,7 +48,7 @@ class DbController{
             }
             else{
 
-                return { status : 200 }
+                return { status : 200 , data : res.rows[0].user_id }
             }
         }
         catch(error){
