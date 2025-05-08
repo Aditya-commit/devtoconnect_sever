@@ -251,7 +251,7 @@ export const signOut = async(req , res) => {
 
     const dbResponse = await db.delete_row(QUERY , [sessionid]);
 
-    res.clearCookie('sessionid');
+    res.clearCookie('sessionid' , { httponly : true , secure : true , sameSite : 'none' , signed : true });
 
     res.set('Content-Type' , 'text/plain');
     res.end('Logged out successfully');
