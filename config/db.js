@@ -5,14 +5,14 @@ const INTERNAL_ERROR='Internal Server Error';
 
 
 const POOL_CONFIG = {
-    connectionString : process.env.SUPABASE_DB_URL,
+    connectionString : process.env.CONN_STRING,
     max: 100,
     min : 20,
     idleTimeoutMillis: 300000,
     connectionTimeoutMillis: 20000,
     ssl: {
-        rejectUnauthorized: false,
-      }
+        rejectUnauthorized: false,  // Important for SSL connections
+      },
 }
 
 
@@ -38,7 +38,7 @@ class DbController{
 
             if(res.rows.length === 0){
 
-                return { status : 404 , error : 'Unauthenticated' }
+                return { status : 401 , error : 'Unauthenticated' }
             }
             else{
 
@@ -47,6 +47,8 @@ class DbController{
         }
         catch(error){
 
+            console.log(error);
+
             return { status : 500 , error : INTERNAL_ERROR }
 
         }
@@ -54,6 +56,7 @@ class DbController{
 
 
     async get_data(query , values){
+
 
         try{
             const res = await DbController.#pool.query(query , values);

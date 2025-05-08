@@ -28,6 +28,7 @@ export const getInfo = async (req , res) => {
 
     const response = await db.get_data(QUERY , [req.user_id]);
 
+
     if(response.status === 200){
 
         res.set("Content-Type" , 'application/json');
