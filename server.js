@@ -111,6 +111,6 @@ app.use('/feedback' , feedbackRouter);
 
 
 
-app.listen(process.env.PORT , process.env.HOST , () => {
+app.listen(process.env.PORT , () => {
 	console.log(`Server is listening at port ${process.env.PORT}`);
 });
