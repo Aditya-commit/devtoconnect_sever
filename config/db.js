@@ -5,15 +5,14 @@ const INTERNAL_ERROR='Internal Server Error';
 
 
 const POOL_CONFIG = {
-    host: process.env.PG_HOST,
-    port : process.env.PG_PORT,
-    user : process.env.PG_USER,
-    password: process.env.PG_PASSWORD,
-    database : process.env.PG_DATABASE,
+    connectionString : process.env.SUPABASE_DB_URL,
     max: 100,
     min : 20,
     idleTimeoutMillis: 300000,
     connectionTimeoutMillis: 20000,
+    ssl: {
+        rejectUnauthorized: false,
+      }
 }
 
 
