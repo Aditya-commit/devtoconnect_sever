@@ -13,6 +13,36 @@ import DbController from '../config/db.js';
 
 
 
+export const checkAuthentication = async(req , res) => {
+
+    res.set('Content-Type' , 'text/plain');
+    res.status(200).end('Ok');
+};
+
+
+export const getInfo = async (req , res) => {
+
+    const db = new DbController();
+
+    const QUERY = "SELECT id , username FROM dtc.users WHERE id=$1;";
+
+    const response = await db.get_data(QUERY , [req.user_id]);
+
+    if(response.status === 200){
+
+        res.set("Content-Type" , 'application/json');
+        res.status(200).end(JSON.stringify(response.data[0]));
+    }
+    else{
+        res.set("Content-Type" , 'text/plain');
+        res.status(response.status).end(response.error);
+    }
+}
+
+
+
+
+
 export const signIn = async(req , res) => {
 
     const date = Date.now();
@@ -36,7 +66,11 @@ export const signIn = async(req , res) => {
 
         const validUsername = validateUsername(username);
 
-        if(!validUsername){
+        if(username === ''){
+            res.set("Cotent-Type" , 'text/plain');
+            res.status(400).end('Username cannot be empty');
+        }
+        else if(!validUsername){
 
             res.set("Cotent-Type" , 'text/plain');
             res.status(400).end('Username is not of valid format');
@@ -76,7 +110,7 @@ export const signIn = async(req , res) => {
                 
                     if(insertResponse.status === 200){
 
-                        res.cookie('sessionid' , sessionId , { secure : true , signed : true , maxAge: 30 * 24 * 60 * 60 * 1000 });
+                        res.cookie('sessionid' , sessionId , { httponly : true , secure : false , signed : true , maxAge: 30 * 24 * 60 * 60 * 1000 });
 
                         res.set("Content-Type" , 'text/plain');
                         res.status(200).end('Signed In Successfully');
@@ -203,4 +237,22 @@ export const signUp = async(req , res) => {
         res.set('Content-Type' , 'text/plain')
         res.status(400).end('Cannot parse data');
     }
+}
+
+
+export const signOut = async(req , res) => {
+
+    const sessionid = req.signedCookies.sessionid;
+
+    const db = new DbController();
+
+    const QUERY = "DELETE FROM dtc.login_session WHERE session_id=$1;";
+
+    const dbResponse = await db.delete_row(QUERY , [sessionid]);
+
+    res.clearCookie('sessionid');
+
+    res.set('Content-Type' , 'text/plain');
+    res.end('Logged out successfully');
+
 }

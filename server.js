@@ -12,12 +12,14 @@ import DbController from './config/db.js';
 
 // IMPORTING ROUTE HANDLERS
 import userRouters from './routes/auth.js';
+import projectRouters from './routes/projects.js';
+import feedbackRouter from './routes/feedback.js';
 
 
 
 
 
-const whitelist = ['*'];
+const whitelist = ['http://127.0.0.1:3000' , 'http://192.168.29.12:3000'];
 
 const corsOptions = {
 	origin : function (origin, callback) {
@@ -43,9 +45,9 @@ const cookieMiddleware = (req , res ,next) => {
         
         // CHECK WHETHER THE COOKIE IS VALID OR NOT
 
-        const db = new DbController(req.signedCookies.sessionid);
+        const db = new DbController();
 
-        db.authenticate().then(result => {
+        db.authenticate(req.signedCookies.sessionid).then(result => {
           
           if(result.status === 200){
 
@@ -103,6 +105,8 @@ app.use(cookieMiddleware);
 
 // LINK THE ROUTERS
 app.use('/auth' , userRouters);
+app.use('/projects' , projectRouters);
+app.use('/feedback' , feedbackRouter);
 
 
 

@@ -24,17 +24,12 @@ class DbController{
 
     static #pool = new Pool(POOL_CONFIG);
 
-    #sessionid=null;
 
-    constructor(sessionid=null){
-        this.#sessionid = sessionid;
-    }
-
-    async authenticate(){
+    async authenticate(sessionid){
 
         const QUERY = {
             text : "SELECT dtc.login_session.user_id FROM dtc.login_session INNER JOIN dtc.users ON dtc.login_session.user_id=dtc.users.id AND dtc.users.status=$1 WHERE dtc.login_session.session_id=$2",
-            values : ['active' , this.#sessionid]
+            values : ['active' , sessionid]
         }
 
 
@@ -67,6 +62,7 @@ class DbController{
             return { status : 200 , data : res.rows };
         }
         catch(error){
+            console.log(error)
             return { status : 500 , error : INTERNAL_ERROR };
         }
     }
@@ -80,6 +76,7 @@ class DbController{
             return { status : 200 , data : 'Inserted successfully' };
         }
         catch(error){
+            console.log(error);
             return { status : 500 , error : INTERNAL_ERROR };
         }
     }
@@ -120,6 +117,19 @@ class DbController{
             return { status : 500 , error : INTERNAL_ERROR };
         }
 
+    }
+
+    async delete_row(query , value){
+
+        try{
+            const res = await DbController.#pool.query(query , value);
+
+            return { status : 200 , data : 'Deleted successfully' };
+        }
+        catch(error){
+            console.log(error);
+            return { status : 500 , error : INTERNAL_ERROR };
+        }
     }
 }
 
