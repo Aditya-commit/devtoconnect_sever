@@ -19,7 +19,7 @@ import feedbackRouter from './routes/feedback.js';
 
 
 
-const whitelist = ['http://127.0.0.1:3000' , 'http://192.168.29.12:3000'];
+const whitelist = [process.env.ORIGIN];
 
 const corsOptions = {
 	origin : function (origin, callback) {
